@@ -1,4 +1,4 @@
-package de.retest.junit;
+package de.retest.recheck.junit;
 
 import java.lang.reflect.Field;
 import java.util.List;

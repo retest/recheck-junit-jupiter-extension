@@ -1,6 +1,7 @@
 package de.retest.recheck.junit;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstances;
 import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.commons.util.ReflectionUtils.HierarchyTraversalMode;
 
@@ -36,16 +38,27 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		execute( RecheckLifecycle::cap, context );
 	}
 
-	@Override
-	public void afterAll( final ExtensionContext context ) throws Exception {
-		execute( RecheckLifecycle::cap, context );
+	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
+		execute( consumer, context.getRequiredTestInstance(), context.getRequiredTestClass() );
 	}
 
-	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
-		final Predicate<Field> isRecheck = f -> isRecheck( f, context.getRequiredTestInstance() );
-		final List<Field> fields =
-				ReflectionUtils.findFields( context.getRequiredTestClass(), isRecheck, TRAVERSAL_MODE );
-		fields.stream().flatMap( f -> streamRecheckField( context, f ) ).forEach( consumer );
+	@Override
+	public void afterAll( final ExtensionContext context ) throws Exception {
+		executeAll( RecheckLifecycle::cap, context );
+	}
+
+	private void executeAll( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
+		final Class<?> testClass = context.getRequiredTestClass();
+		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
+		context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
+				.forEach( action );
+	}
+
+	private void execute( final Consumer<RecheckLifecycle> consumer, final Object testInstance,
+			final Class<?> testClass ) {
+		final Predicate<Field> isRecheck = f -> isRecheck( f, testInstance );
+		final List<Field> fields = ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE );
+		fields.stream().flatMap( f -> streamRecheckField( f, testInstance ) ).forEach( consumer );
 	}
 
 	/**
@@ -53,8 +66,7 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	 *
 	 * @return a {@link Stream} containing the instance or an empty {@link Stream} otherwise
 	 */
-	private Stream<RecheckLifecycle> streamRecheckField( final ExtensionContext context, final Field field ) {
-		final Object testInstance = context.getRequiredTestInstance();
+	private Stream<RecheckLifecycle> streamRecheckField( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
 			return streamRecheckInstance( field, testInstance );

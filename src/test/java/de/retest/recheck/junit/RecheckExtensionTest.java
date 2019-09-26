@@ -1,13 +1,18 @@
 package de.retest.recheck.junit;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstances;
+import org.junit.jupiter.engine.execution.DefaultTestInstances;
 
 import de.retest.recheck.RecheckLifecycle;
 
@@ -61,9 +66,17 @@ public class RecheckExtensionTest {
 
 	@Test
 	void capsAfterAll() throws Exception {
+		addJUnitAfterAllBehaviour();
+		final TestInstances instances = DefaultTestInstances.of( recheckDummy );
+		when( context.getTestInstances() ).thenReturn( Optional.of( instances ) );
+
 		extension.afterAll( context );
 
 		verify( recheckDummy.recheck ).cap();
+	}
+
+	private void addJUnitAfterAllBehaviour() {
+		doThrow( IllegalStateException.class ).when( context ).getRequiredTestInstance();
 	}
 
 	@Test

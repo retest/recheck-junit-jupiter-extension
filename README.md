@@ -13,4 +13,4 @@ Recheck JUnit extension uses JUnit's extension mechanism. It can be used by addi
 
 ### Prerequisites
 
-Requires at least JUnit Jupiter. For JUnit 4 support look at [recheck extension for JUnit 4](Link zu JUnit 4 Extension)
+Requires at least JUnit Jupiter.

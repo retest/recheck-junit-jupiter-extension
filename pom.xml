@@ -6,6 +6,15 @@
 	<artifactId>recheck-junit-jupiter-extension</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<name>recheck</name>
+	<description>JUnit Jupiter extension reducing boiler plate code in tests.</description>
+	<url>https://retest.de/</url>
+
+	<organization>
+		<name>ReTest GmbH</name>
+		<url>https://retest.de/</url>
+	</organization>
+
 	<licenses>
 		<license>
 			<name>GNU Affero General Public License (AGPL), Version 3</name>

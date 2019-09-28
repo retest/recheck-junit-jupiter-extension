@@ -1,3 +1,5 @@
+# <a href="https://retest.dev"><img src="https://assets.retest.org/retest/ci/logos/recheck-screen.svg" width="300"/></a>
+
 JUnit Extension for [recheck](https://github.com/retest/recheck). Automatic set up and tear down of tests using recheck.
 
 ## Features

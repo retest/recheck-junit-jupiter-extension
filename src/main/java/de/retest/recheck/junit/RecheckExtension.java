@@ -50,8 +50,23 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	private void executeAll( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
 		final Class<?> testClass = context.getRequiredTestClass();
 		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
-		context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
-				.forEach( action );
+		if ( hasMethod( context, "getTestInstances" ) ) {
+			context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
+					.forEach( action );
+		} else {
+			context.getTestInstance().ifPresent( action::accept );
+		}
+	}
+
+	/**
+	 * TODO replace with ReflectionUtilities::hasMethod after recheck release
+	 */
+	private boolean hasMethod( final Object context, final String name, final Class<?>... parameterTypes ) {
+		try {
+			return context.getClass().getMethod( name, parameterTypes ) != null;
+		} catch ( final NoSuchMethodException e ) {
+			return false;
+		}
 	}
 
 	private void execute( final Consumer<RecheckLifecycle> consumer, final Object testInstance,

@@ -12,9 +12,6 @@ addons:
     token:
       secure: "${SONAR_CLOUD_TOKEN}"
 
-notifications:
-  email: false
-
 cache:
   directories:
     - "${HOME}/.sonar/cache/"

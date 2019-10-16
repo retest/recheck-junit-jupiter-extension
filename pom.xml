@@ -116,7 +116,7 @@
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
 						<manifestEntries>
-							<Automatic-Module-Name>de.retest.recheck</Automatic-Module-Name>
+							<Automatic-Module-Name>de.retest.recheck.junit</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
 				</configuration>

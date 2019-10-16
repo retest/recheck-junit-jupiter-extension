@@ -28,7 +28,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<junit.jupiter.version>5.5.1</junit.jupiter.version>
+		<junit.jupiter.version>5.5.2</junit.jupiter.version>
 		<recheck.version>1.5.0</recheck.version>
 		<service.declaration.dir>src</service.declaration.dir>
 		<service.files.path>META-INF/services</service.files.path>
@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.0.0</version>
+			<version>3.1.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

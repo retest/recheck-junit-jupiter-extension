@@ -34,6 +34,24 @@
 		<service.files.path>META-INF/services</service.files.path>
 	</properties>
 
+	<scm>
+		<url>https://github.com/retest/recheck-junit-jupiter-extension</url>
+		<connection>scm:git:git@github.com:retest/recheck-junit-jupiter-extension.git</connection>
+		<developerConnection>scm:git:git@github.com:retest/recheck-junit-jupiter-extension.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

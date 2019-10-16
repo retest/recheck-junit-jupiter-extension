@@ -1,4 +1,4 @@
-package de.retest.recheck.junit;
+package de.retest.recheck.junit.jupiter;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.TestInstances;
 import org.junit.jupiter.engine.execution.DefaultTestInstances;
 
 import de.retest.recheck.RecheckLifecycle;
+import de.retest.recheck.junit.jupiter.RecheckExtension;
 
 public class RecheckExtensionTest {
 

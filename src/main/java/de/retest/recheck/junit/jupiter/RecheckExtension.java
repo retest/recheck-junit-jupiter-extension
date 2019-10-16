@@ -1,4 +1,4 @@
-package de.retest.recheck.junit;
+package de.retest.recheck.junit.jupiter;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

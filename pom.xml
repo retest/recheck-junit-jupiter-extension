@@ -7,7 +7,7 @@
 	<artifactId>recheck-junit-jupiter-extension</artifactId>
 	<version>1.6.0-SNAPSHOT</version>
 
-	<name>recheck</name>
+	<name>recheck-junit-jupiter-extension</name>
 	<description>JUnit Jupiter extension reducing boilerplate code in tests.</description>
 	<url>https://retest.de/recheck/</url>
 

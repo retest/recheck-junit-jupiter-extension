@@ -1,5 +1,6 @@
 package de.retest.recheck.junit.jupiter;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.extension.TestInstances;
 import org.junit.jupiter.engine.execution.DefaultTestInstances;
 
 import de.retest.recheck.RecheckLifecycle;
-import de.retest.recheck.junit.jupiter.RecheckExtension;
 
 public class RecheckExtensionTest {
 
@@ -91,10 +91,12 @@ public class RecheckExtensionTest {
 
 	@Test
 	void doesNotFailOnEmptyTest() throws Exception {
-		configure( new EmptyTest() );
+		assertThatCode( () -> {
+			configure( new EmptyTest() );
 
-		extension.beforeTestExecution( context );
-		extension.afterTestExecution( context );
-		extension.afterAll( context );
+			extension.beforeTestExecution( context );
+			extension.afterTestExecution( context );
+			extension.afterAll( context );
+		} ).doesNotThrowAnyException();
 	}
 }

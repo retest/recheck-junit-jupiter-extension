@@ -18,6 +18,28 @@ JUnit Extension for [recheck](https://github.com/retest/recheck). Automatic set 
 
 The extension automatically calls `startTest`, `capTest` and `cap`. So it is no longer required to call those methods manually. This reduces boilerplate code and ensures the lifecycle within a test using recheck.
 
+## Build tools
+
+You can add ***recheck-junit-jupiter-extension*** as an external dependency to your project. It is available in [Maven central](https://mvnrepository.com/artifact/de.retest/recheck-junit-jupiter-extension) or via the [release-page](https://github.com/retest/recheck-junit-jupiter-extension/releases), which allows you to include it into your favorite build tool.
+
+For the current version, please refer to the release-page.
+
+### Maven
+
+```xml
+<dependency>
+	<groupId>de.retest</groupId>
+	<artifactId>recheck-junit-jupiter-extension</artifactId>
+	<version>${LATEST_VERSION_FROM_ABOVE_LINK}</version>
+</dependency>
+```
+
+### Gradle
+
+```gradle
+compile 'de.retest:recheck-junit-jupiter-extension:${LATEST_VERSION_FROM_ABOVE_LINK}'
+```
+
 ## Usage
 
 Recheck JUnit extension uses JUnit's extension mechanism. It can be used by adding `@ExtendWith(RecheckExtension.class)` to your test class.

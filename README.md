@@ -46,7 +46,7 @@ Recheck JUnit extension uses JUnit's extension mechanism. It can be used by addi
 
 ### Prerequisites
 
-Requires at least [JUnit Jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api). For JUnit 4 support look at [recheck extension for JUnit 4](https://github.com/retest/recheck-junit-4-extension).
+Requires at least [JUnit Jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter). For JUnit 4 support look at [recheck extension for JUnit 4](https://github.com/retest/recheck-junit-4-extension).
 
 ## License
 

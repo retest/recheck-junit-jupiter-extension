@@ -19,6 +19,7 @@ import de.retest.recheck.RecheckLifecycle;
 
 class RecheckExtensionTest {
 
+	private static final String displayName = "testName()";
 	private static final String testName = "testName";
 
 	private ExtensionContext context;
@@ -43,7 +44,7 @@ class RecheckExtensionTest {
 		recheckDummy.recheck = mock( RecheckLifecycle.class );
 		recheckDummy.someField = mock( Runnable.class );
 		configure( recheckDummy );
-		when( context.getDisplayName() ).thenReturn( testName );
+		when( context.getDisplayName() ).thenReturn( displayName );
 
 		extension = new RecheckExtension();
 	}

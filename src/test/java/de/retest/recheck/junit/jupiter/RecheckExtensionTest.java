@@ -20,6 +20,7 @@ import de.retest.recheck.RecheckLifecycle;
 public class RecheckExtensionTest {
 
 	private static final String testName = "testName";
+
 	private ExtensionContext context;
 	private RecheckDummy recheckDummy;
 	private RecheckExtension extension;
@@ -28,6 +29,7 @@ public class RecheckExtensionTest {
 
 		private RecheckLifecycle recheck;
 		private Runnable someField;
+
 	}
 
 	private static class EmptyTest {

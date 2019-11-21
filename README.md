@@ -20,9 +20,7 @@ The extension automatically calls `startTest`, `capTest` and `cap`. So it is no 
 
 ## Build tools
 
-You can add ***recheck-junit-jupiter-extension*** as an external dependency to your project. It is available in [Maven central](https://mvnrepository.com/artifact/de.retest/recheck-junit-jupiter-extension) or via the [release-page](https://github.com/retest/recheck-junit-jupiter-extension/releases), which allows you to include it into your favorite build tool.
-
-For the current version, please refer to the release-page.
+You can add ***recheck-junit-jupiter-extension*** as an external dependency to your project. It is available via the [release-page](https://github.com/retest/recheck-junit-jupiter-extension/releases) which allows you to include it into your favorite build tool or via [Maven central](https://mvnrepository.com/artifact/de.retest/recheck-junit-jupiter-extension): [![Latest recheck-junit-jupiter-extension on Maven Central](https://maven-badges.herokuapp.com/maven-central/de.retest/recheck-junit-jupiter-extension/badge.svg?style=flat)](https://mvnrepository.com/artifact/de.retest/recheck-junit-jupiter-extension)
 
 ### Maven
 

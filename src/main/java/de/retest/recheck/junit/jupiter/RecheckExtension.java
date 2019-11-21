@@ -28,14 +28,25 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	@Override
 	public void beforeTestExecution( final ExtensionContext context ) throws Exception {
-		final Consumer<RecheckLifecycle> startTest = r -> r.startTest( context.getDisplayName() );
+		final Consumer<RecheckLifecycle> startTest = r -> r.startTest( toTestName( context.getDisplayName() ) );
 		execute( startTest, context );
+	}
+
+	private String toTestName( final String displayName ) {
+		if ( displayName.endsWith( "()" ) ) {
+			return displayName.substring( 0, displayName.length() - 2 );
+		}
+		return displayName;
 	}
 
 	@Override
 	public void afterTestExecution( final ExtensionContext context ) throws Exception {
-		execute( RecheckLifecycle::capTest, context );
-		execute( RecheckLifecycle::cap, context );
+		try {
+			execute( RecheckLifecycle::capTest, context );
+		} finally {
+			execute( RecheckLifecycle::cap, context );
+		}
+
 	}
 
 	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {

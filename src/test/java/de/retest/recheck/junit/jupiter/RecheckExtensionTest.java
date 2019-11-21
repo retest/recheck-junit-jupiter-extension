@@ -17,7 +17,7 @@ import org.junit.jupiter.engine.execution.DefaultTestInstances;
 
 import de.retest.recheck.RecheckLifecycle;
 
-public class RecheckExtensionTest {
+class RecheckExtensionTest {
 
 	private static final String testName = "testName";
 

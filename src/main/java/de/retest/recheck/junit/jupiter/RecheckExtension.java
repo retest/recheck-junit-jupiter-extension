@@ -41,8 +41,12 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	@Override
 	public void afterTestExecution( final ExtensionContext context ) throws Exception {
-		execute( RecheckLifecycle::capTest, context );
-		execute( RecheckLifecycle::cap, context );
+		try {
+			execute( RecheckLifecycle::capTest, context );
+		} finally {
+			execute( RecheckLifecycle::cap, context );
+		}
+
 	}
 
 	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {

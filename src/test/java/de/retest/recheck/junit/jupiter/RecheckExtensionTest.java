@@ -17,9 +17,11 @@ import org.junit.jupiter.engine.execution.DefaultTestInstances;
 
 import de.retest.recheck.RecheckLifecycle;
 
-public class RecheckExtensionTest {
+class RecheckExtensionTest {
 
+	private static final String displayName = "testName()";
 	private static final String testName = "testName";
+
 	private ExtensionContext context;
 	private RecheckDummy recheckDummy;
 	private RecheckExtension extension;
@@ -28,6 +30,7 @@ public class RecheckExtensionTest {
 
 		private RecheckLifecycle recheck;
 		private Runnable someField;
+
 	}
 
 	private static class EmptyTest {
@@ -41,7 +44,7 @@ public class RecheckExtensionTest {
 		recheckDummy.recheck = mock( RecheckLifecycle.class );
 		recheckDummy.someField = mock( Runnable.class );
 		configure( recheckDummy );
-		when( context.getDisplayName() ).thenReturn( testName );
+		when( context.getDisplayName() ).thenReturn( displayName );
 
 		extension = new RecheckExtension();
 	}

@@ -102,4 +102,13 @@ class RecheckExtensionTest {
 			extension.afterAll( context );
 		} ).doesNotThrowAnyException();
 	}
+
+	@Test
+	void doesNotFailOnCapTestAssertionError() throws Exception {
+		doThrow( new AssertionError() ).when( recheckDummy.recheck ).capTest();
+
+		assertThatCode( () -> extension.afterTestExecution( context ) ).isInstanceOf( AssertionError.class );
+
+		verify( recheckDummy.recheck ).cap();
+	}
 }

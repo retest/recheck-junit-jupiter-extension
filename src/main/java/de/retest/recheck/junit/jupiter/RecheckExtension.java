@@ -16,6 +16,7 @@ import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.commons.util.ReflectionUtils.HierarchyTraversalMode;
 
 import de.retest.recheck.RecheckLifecycle;
+import de.retest.recheck.util.ReflectionUtilities;
 
 /**
  * This extension adds callback to automatically execute {@link RecheckLifecycle#startTest()} before each test
@@ -61,22 +62,11 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	private void executeAll( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
 		final Class<?> testClass = context.getRequiredTestClass();
 		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
-		if ( hasMethod( context, "getTestInstances" ) ) {
+		if ( ReflectionUtilities.hasMethod( context.getClass(), "getTestInstances" ) ) {
 			context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
 					.forEach( action );
 		} else {
 			context.getTestInstance().ifPresent( action::accept );
-		}
-	}
-
-	/**
-	 * TODO replace with ReflectionUtilities::hasMethod after recheck release
-	 */
-	private boolean hasMethod( final Object context, final String name, final Class<?>... parameterTypes ) {
-		try {
-			return context.getClass().getMethod( name, parameterTypes ) != null;
-		} catch ( final NoSuchMethodException e ) {
-			return false;
 		}
 	}
 

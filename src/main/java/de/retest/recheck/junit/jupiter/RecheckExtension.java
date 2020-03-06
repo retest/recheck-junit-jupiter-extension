@@ -27,7 +27,8 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	@Override
 	public void beforeTestExecution( final ExtensionContext context ) throws Exception {
-		final Consumer<RecheckLifecycle> startTest = r -> r.startTest( toTestName( context.getDisplayName() ) );
+		final Consumer<RecheckLifecycle> startTest =
+				lifecycle -> lifecycle.startTest( toTestName( context.getDisplayName() ) );
 		execute( startTest, context );
 	}
 
@@ -45,11 +46,10 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		} finally {
 			execute( RecheckLifecycle::cap, context );
 		}
-
 	}
 
-	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
-		execute( consumer, context.getRequiredTestInstance(), context.getRequiredTestClass() );
+	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
+		execute( lifecycleMethod, context.getRequiredTestInstance(), context.getRequiredTestClass() );
 	}
 
 	@Override
@@ -57,25 +57,25 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		executeAll( RecheckLifecycle::cap, context );
 	}
 
-	private void executeAll( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
+	private void executeAll( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
 		final Class<?> testClass = context.getRequiredTestClass();
-		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
+		final Consumer<Object> execute = testInstance -> execute( lifecycleMethod, testInstance, testClass );
 		if ( ReflectionUtilities.hasMethod( context.getClass(), "getTestInstances" ) ) {
 			context.getTestInstances() //
 					.map( TestInstances::getAllInstances ) //
 					.orElse( Collections.emptyList() ) //
-					.forEach( action );
+					.forEach( execute );
 		} else {
-			context.getTestInstance().ifPresent( action );
+			context.getTestInstance().ifPresent( execute );
 		}
 	}
 
-	private void execute( final Consumer<RecheckLifecycle> consumer, final Object testInstance,
+	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final Object testInstance,
 			final Class<?> testClass ) {
 		final Predicate<Field> isRecheck = field -> isRecheck( field, testInstance );
 		ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE ).stream() //
 				.map( field -> getRecheckLifecycle( field, testInstance ) ) //
-				.forEach( consumer );
+				.forEach( lifecycleMethod );
 	}
 
 	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {

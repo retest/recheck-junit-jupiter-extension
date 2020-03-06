@@ -106,10 +106,10 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		return Stream.empty();
 	}
 
-	private boolean isRecheck( final Field field, final Object ofTestInstance ) {
+	private boolean isRecheck( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return RecheckLifecycle.class.isInstance( field.get( ofTestInstance ) );
+			return RecheckLifecycle.class.isInstance( field.get( testInstance ) );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

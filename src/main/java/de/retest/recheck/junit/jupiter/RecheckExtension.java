@@ -100,10 +100,7 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	 */
 	private Stream<RecheckLifecycle> streamRecheckInstance( final Field field, final Object testInstance )
 			throws IllegalArgumentException, IllegalAccessException {
-		if ( isRecheck( field, testInstance ) ) {
-			return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
-		}
-		return Stream.empty();
+		return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
 	}
 
 	private boolean isRecheck( final Field field, final Object testInstance ) {

@@ -2,10 +2,8 @@ package de.retest.recheck.junit.jupiter;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
@@ -74,20 +72,16 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	private void execute( final Consumer<RecheckLifecycle> consumer, final Object testInstance,
 			final Class<?> testClass ) {
-		final Predicate<Field> isRecheck = f -> isRecheck( f, testInstance );
-		final List<Field> fields = ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE );
-		fields.stream().flatMap( f -> streamRecheckField( f, testInstance ) ).forEach( consumer );
+		final Predicate<Field> isRecheck = field -> isRecheck( field, testInstance );
+		ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE ).stream() //
+				.map( field -> getRecheckLifecycle( field, testInstance ) ) //
+				.forEach( consumer );
 	}
 
-	/**
-	 * Extracts the instance of a {@link RecheckLifecycle} field from the test instance
-	 *
-	 * @return a {@link Stream} containing the instance or an empty {@link Stream} otherwise
-	 */
-	private Stream<RecheckLifecycle> streamRecheckField( final Field field, final Object testInstance ) {
+	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
+			return (RecheckLifecycle) field.get( testInstance );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

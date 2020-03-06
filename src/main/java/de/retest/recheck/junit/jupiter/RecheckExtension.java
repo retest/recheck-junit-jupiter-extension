@@ -48,10 +48,6 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		}
 	}
 
-	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
-		execute( lifecycleMethod, context.getRequiredTestInstance(), context.getRequiredTestClass() );
-	}
-
 	@Override
 	public void afterAll( final ExtensionContext context ) throws Exception {
 		executeAll( RecheckLifecycle::cap, context );
@@ -68,6 +64,10 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		} else {
 			context.getTestInstance().ifPresent( execute );
 		}
+	}
+
+	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
+		execute( lifecycleMethod, context.getRequiredTestInstance(), context.getRequiredTestClass() );
 	}
 
 	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final Object testInstance,

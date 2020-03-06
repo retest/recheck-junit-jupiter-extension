@@ -23,7 +23,7 @@ class RecheckExtensionTest {
 	private static final String testName = "testName";
 
 	private ExtensionContext context;
-	private RecheckTest receheckTest;
+	private RecheckTest recheckTest;
 	private RecheckExtension extension;
 
 	private static class RecheckTest {
@@ -40,10 +40,10 @@ class RecheckExtensionTest {
 	@BeforeEach
 	void beforeEach() {
 		context = mock( ExtensionContext.class );
-		receheckTest = new RecheckTest();
-		receheckTest.recheck = mock( RecheckLifecycle.class );
-		receheckTest.someField = mock( Runnable.class );
-		configure( receheckTest );
+		recheckTest = new RecheckTest();
+		recheckTest.recheck = mock( RecheckLifecycle.class );
+		recheckTest.someField = mock( Runnable.class );
+		configure( recheckTest );
 		when( context.getDisplayName() ).thenReturn( displayName );
 
 		extension = new RecheckExtension();
@@ -58,25 +58,25 @@ class RecheckExtensionTest {
 	void startsTest() throws Exception {
 		extension.beforeTestExecution( context );
 
-		verify( receheckTest.recheck ).startTest( testName );
+		verify( recheckTest.recheck ).startTest( testName );
 	}
 
 	@Test
 	void capsTest() throws Exception {
 		extension.afterTestExecution( context );
 
-		verify( receheckTest.recheck ).capTest();
+		verify( recheckTest.recheck ).capTest();
 	}
 
 	@Test
 	void capsAfterAll() throws Exception {
 		addJUnitAfterAllBehaviour();
-		final TestInstances instances = DefaultTestInstances.of( receheckTest );
+		final TestInstances instances = DefaultTestInstances.of( recheckTest );
 		when( context.getTestInstances() ).thenReturn( Optional.of( instances ) );
 
 		extension.afterAll( context );
 
-		verify( receheckTest.recheck ).cap();
+		verify( recheckTest.recheck ).cap();
 	}
 
 	private void addJUnitAfterAllBehaviour() {
@@ -89,7 +89,7 @@ class RecheckExtensionTest {
 		extension.afterTestExecution( context );
 		extension.afterAll( context );
 
-		verifyNoInteractions( receheckTest.someField );
+		verifyNoInteractions( recheckTest.someField );
 	}
 
 	@Test
@@ -105,10 +105,10 @@ class RecheckExtensionTest {
 
 	@Test
 	void doesNotFailOnCapTestAssertionError() throws Exception {
-		doThrow( new AssertionError() ).when( receheckTest.recheck ).capTest();
+		doThrow( new AssertionError() ).when( recheckTest.recheck ).capTest();
 
 		assertThatCode( () -> extension.afterTestExecution( context ) ).isInstanceOf( AssertionError.class );
 
-		verify( receheckTest.recheck ).cap();
+		verify( recheckTest.recheck ).cap();
 	}
 }

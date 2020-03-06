@@ -87,20 +87,12 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	private Stream<RecheckLifecycle> streamRecheckField( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return streamRecheckInstance( field, testInstance );
+			return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {
 			lock( field, accessibility );
 		}
-	}
-
-	/**
-	 * @return a {@link Stream} containing an instance of {@link RecheckLifecycle} or an empty {@link Stream} otherwise
-	 */
-	private Stream<RecheckLifecycle> streamRecheckInstance( final Field field, final Object testInstance )
-			throws IllegalArgumentException, IllegalAccessException {
-		return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
 	}
 
 	private boolean isRecheck( final Field field, final Object testInstance ) {

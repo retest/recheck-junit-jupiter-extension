@@ -78,10 +78,10 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 				.forEach( lifecycleMethod );
 	}
 
-	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
+	private boolean isRecheck( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return (RecheckLifecycle) field.get( testInstance );
+			return RecheckLifecycle.class.isInstance( field.get( testInstance ) );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {
@@ -89,10 +89,10 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		}
 	}
 
-	private boolean isRecheck( final Field field, final Object testInstance ) {
+	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return RecheckLifecycle.class.isInstance( field.get( testInstance ) );
+			return (RecheckLifecycle) field.get( testInstance );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

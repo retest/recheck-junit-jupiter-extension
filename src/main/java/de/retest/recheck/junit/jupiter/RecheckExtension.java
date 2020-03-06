@@ -72,13 +72,13 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final Object testInstance,
 			final Class<?> testClass ) {
-		final Predicate<Field> isRecheck = field -> isRecheck( field, testInstance );
+		final Predicate<Field> isRecheck = field -> isRecheckLifecycle( field, testInstance );
 		ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE ).stream() //
 				.map( field -> getRecheckLifecycle( field, testInstance ) ) //
 				.forEach( lifecycleMethod );
 	}
 
-	private boolean isRecheck( final Field field, final Object testInstance ) {
+	private boolean isRecheckLifecycle( final Field field, final Object testInstance ) {
 		final boolean accessibility = unlock( field );
 		try {
 			return RecheckLifecycle.class.isInstance( field.get( testInstance ) );

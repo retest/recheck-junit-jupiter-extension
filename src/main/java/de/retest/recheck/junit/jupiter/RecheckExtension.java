@@ -63,10 +63,12 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		final Class<?> testClass = context.getRequiredTestClass();
 		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
 		if ( ReflectionUtilities.hasMethod( context.getClass(), "getTestInstances" ) ) {
-			context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
+			context.getTestInstances() //
+					.map( TestInstances::getAllInstances ) //
+					.orElse( Collections.emptyList() ) //
 					.forEach( action );
 		} else {
-			context.getTestInstance().ifPresent( action::accept );
+			context.getTestInstance().ifPresent( action );
 		}
 	}
 

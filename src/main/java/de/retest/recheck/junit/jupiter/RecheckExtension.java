@@ -3,6 +3,7 @@ package de.retest.recheck.junit.jupiter;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -79,20 +80,18 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	}
 
 	private boolean isRecheckLifecycle( final Field field, final Object testInstance ) {
-		final boolean accessibility = unlock( field );
-		try {
-			return RecheckLifecycle.class.isInstance( field.get( testInstance ) );
-		} catch ( IllegalArgumentException | IllegalAccessException e ) {
-			throw new IllegalStateException( e );
-		} finally {
-			lock( field, accessibility );
-		}
+		return applyOnFieldValue( field, testInstance, value -> value instanceof RecheckLifecycle );
 	}
 
 	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
+		return applyOnFieldValue( field, testInstance, value -> (RecheckLifecycle) value );
+	}
+
+	private <T> T applyOnFieldValue( final Field field, final Object testInstance, final Function<Object, T> f ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return (RecheckLifecycle) field.get( testInstance );
+			final Object value = field.get( testInstance );
+			return f.apply( value );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

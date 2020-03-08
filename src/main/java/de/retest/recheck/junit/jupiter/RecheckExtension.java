@@ -80,18 +80,18 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 	}
 
 	private boolean isRecheckLifecycle( final Field field, final Object testInstance ) {
-		return applyOnFieldValue( field, testInstance, value -> value instanceof RecheckLifecycle );
+		return mapFieldValue( field, testInstance, value -> value instanceof RecheckLifecycle );
 	}
 
 	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
-		return applyOnFieldValue( field, testInstance, value -> (RecheckLifecycle) value );
+		return mapFieldValue( field, testInstance, value -> (RecheckLifecycle) value );
 	}
 
-	private <T> T applyOnFieldValue( final Field field, final Object testInstance, final Function<Object, T> f ) {
+	private <T> T mapFieldValue( final Field field, final Object testInstance, final Function<Object, T> mapper ) {
 		final boolean accessibility = unlock( field );
 		try {
 			final Object value = field.get( testInstance );
-			return f.apply( value );
+			return mapper.apply( value );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

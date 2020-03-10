@@ -43,6 +43,32 @@ compile 'de.retest:recheck-junit-jupiter-extension:${LATEST_VERSION_FROM_ABOVE_L
 
 The recheck JUnit extension uses JUnit's extension mechanism. It can be used as a [declarative extension](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-declarative) by adding `@ExtendWith(RecheckExtension.class)` to your test class or [globally/automatically](https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic) by adding a `/META-INF/services/org.junit.jupiter.api.extension.Extension` file to your project with `de.retest.recheck.junit.jupiter.RecheckExtension` as its sole contents and setting the `junit.jupiter.extensions.autodetection.enabled=true` parameter e.g. in your `pom.xml` or as a JVM system property.
 
+### Example
+
+A simple example that will visit a page and capture it.
+
+```java
+@ExtendWith(RecheckExtension.class)
+public class SimpleTest {
+	private RecheckDriver driver;
+
+	@BeforeEach
+	void setUp() {
+		driver = new RecheckDriver(new ChromeDriver());
+	}
+
+	@AfterEach
+	void tearDown() {
+		driver.quit();
+	}
+
+	@Test
+	void hello_example_dot_com() {
+		driver.get( "https://example.com/" );
+	}
+}
+```
+
 ### Prerequisites
 
 Requires at least [JUnit Jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter). For JUnit 4 support look at [recheck extension for JUnit 4](https://github.com/retest/recheck-junit-4-extension).

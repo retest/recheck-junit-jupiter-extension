@@ -2,10 +2,9 @@ package de.retest.recheck.junit.jupiter;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
@@ -16,6 +15,7 @@ import org.junit.platform.commons.util.ReflectionUtils;
 import org.junit.platform.commons.util.ReflectionUtils.HierarchyTraversalMode;
 
 import de.retest.recheck.RecheckLifecycle;
+import de.retest.recheck.util.ReflectionUtilities;
 
 /**
  * This extension adds callback to automatically execute {@link RecheckLifecycle#startTest()} before each test
@@ -28,7 +28,8 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 
 	@Override
 	public void beforeTestExecution( final ExtensionContext context ) throws Exception {
-		final Consumer<RecheckLifecycle> startTest = r -> r.startTest( toTestName( context.getDisplayName() ) );
+		final Consumer<RecheckLifecycle> startTest =
+				lifecycle -> lifecycle.startTest( toTestName( context.getDisplayName() ) );
 		execute( startTest, context );
 	}
 
@@ -46,11 +47,6 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		} finally {
 			execute( RecheckLifecycle::cap, context );
 		}
-
-	}
-
-	private void execute( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
-		execute( consumer, context.getRequiredTestInstance(), context.getRequiredTestClass() );
 	}
 
 	@Override
@@ -58,66 +54,44 @@ public class RecheckExtension implements BeforeTestExecutionCallback, AfterTestE
 		executeAll( RecheckLifecycle::cap, context );
 	}
 
-	private void executeAll( final Consumer<RecheckLifecycle> consumer, final ExtensionContext context ) {
+	private void executeAll( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
 		final Class<?> testClass = context.getRequiredTestClass();
-		final Consumer<Object> action = testInstance -> execute( consumer, testInstance, testClass );
-		if ( hasMethod( context, "getTestInstances" ) ) {
-			context.getTestInstances().map( TestInstances::getAllInstances ).orElse( Collections.emptyList() )
-					.forEach( action );
+		final Consumer<Object> execute = testInstance -> execute( lifecycleMethod, testInstance, testClass );
+		if ( ReflectionUtilities.hasMethod( context.getClass(), "getTestInstances" ) ) {
+			context.getTestInstances() //
+					.map( TestInstances::getAllInstances ) //
+					.orElse( Collections.emptyList() ) //
+					.forEach( execute );
 		} else {
-			context.getTestInstance().ifPresent( action::accept );
+			context.getTestInstance().ifPresent( execute );
 		}
 	}
 
-	/**
-	 * TODO replace with ReflectionUtilities::hasMethod after recheck release
-	 */
-	private boolean hasMethod( final Object context, final String name, final Class<?>... parameterTypes ) {
-		try {
-			return context.getClass().getMethod( name, parameterTypes ) != null;
-		} catch ( final NoSuchMethodException e ) {
-			return false;
-		}
+	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final ExtensionContext context ) {
+		execute( lifecycleMethod, context.getRequiredTestInstance(), context.getRequiredTestClass() );
 	}
 
-	private void execute( final Consumer<RecheckLifecycle> consumer, final Object testInstance,
+	private void execute( final Consumer<RecheckLifecycle> lifecycleMethod, final Object testInstance,
 			final Class<?> testClass ) {
-		final Predicate<Field> isRecheck = f -> isRecheck( f, testInstance );
-		final List<Field> fields = ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE );
-		fields.stream().flatMap( f -> streamRecheckField( f, testInstance ) ).forEach( consumer );
+		final Predicate<Field> isRecheck = field -> isRecheckLifecycle( field, testInstance );
+		ReflectionUtils.findFields( testClass, isRecheck, TRAVERSAL_MODE ).stream() //
+				.map( field -> getRecheckLifecycle( field, testInstance ) ) //
+				.forEach( lifecycleMethod );
 	}
 
-	/**
-	 * Extracts the instance of a {@link RecheckLifecycle} field from the test instance
-	 *
-	 * @return a {@link Stream} containing the instance or an empty {@link Stream} otherwise
-	 */
-	private Stream<RecheckLifecycle> streamRecheckField( final Field field, final Object testInstance ) {
+	private boolean isRecheckLifecycle( final Field field, final Object testInstance ) {
+		return mapFieldValue( field, testInstance, value -> value instanceof RecheckLifecycle );
+	}
+
+	private RecheckLifecycle getRecheckLifecycle( final Field field, final Object testInstance ) {
+		return mapFieldValue( field, testInstance, value -> (RecheckLifecycle) value );
+	}
+
+	private <T> T mapFieldValue( final Field field, final Object testInstance, final Function<Object, T> mapper ) {
 		final boolean accessibility = unlock( field );
 		try {
-			return streamRecheckInstance( field, testInstance );
-		} catch ( IllegalArgumentException | IllegalAccessException e ) {
-			throw new IllegalStateException( e );
-		} finally {
-			lock( field, accessibility );
-		}
-	}
-
-	/**
-	 * @return a {@link Stream} containing an instance of {@link RecheckLifecycle} or an empty {@link Stream} otherwise
-	 */
-	private Stream<RecheckLifecycle> streamRecheckInstance( final Field field, final Object testInstance )
-			throws IllegalArgumentException, IllegalAccessException {
-		if ( isRecheck( field, testInstance ) ) {
-			return Stream.of( (RecheckLifecycle) field.get( testInstance ) );
-		}
-		return Stream.empty();
-	}
-
-	private boolean isRecheck( final Field field, final Object ofTestInstance ) {
-		final boolean accessibility = unlock( field );
-		try {
-			return RecheckLifecycle.class.isInstance( field.get( ofTestInstance ) );
+			final Object value = field.get( testInstance );
+			return mapper.apply( value );
 		} catch ( IllegalArgumentException | IllegalAccessException e ) {
 			throw new IllegalStateException( e );
 		} finally {

@@ -46,13 +46,6 @@
 		<service.files.path>META-INF/services</service.files.path>
 	</properties>
 
-	<scm>
-		<url>https://github.com/retest/recheck-junit-jupiter-extension</url>
-		<connection>scm:git:git@github.com:retest/recheck-junit-jupiter-extension.git</connection>
-		<developerConnection>scm:git:git@github.com:retest/recheck-junit-jupiter-extension.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -144,6 +137,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>3.0.0-M1</version>
 				<configuration>
 					<goals>install</goals>
 					<tagNameFormat>v@{project.version}</tagNameFormat>
@@ -280,4 +274,11 @@
 			</build>
 		</profile>
 	</profiles>
+
+	<scm>
+		<connection>scm:git:https://${git.repo.host}/${git.repo.path}.git</connection>
+		<developerConnection>scm:git:ssh://git@${git.repo.host}/${git.repo.path}.git</developerConnection>
+		<url>https://${git.repo.host}/${git.repo.path}/</url>
+		<tag>HEAD</tag>
+	</scm>
 </project>

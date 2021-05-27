@@ -45,8 +45,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.resources.sourceEncoding>UTF-8</project.resources.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<service.declaration.dir>src</service.declaration.dir>
-		<service.files.path>META-INF/services</service.files.path>
 	</properties>
 
 	<distributionManagement>
@@ -111,6 +109,10 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArguments>
+						<Xlint:unchecked />
+						<Xlint:deprecation />
+					</compilerArguments>
 				</configuration>
 			</plugin>
 
@@ -224,15 +226,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
-		<resources>
-			<resource>
-				<directory>${service.declaration.dir}</directory>
-				<includes>
-					<include>${service.files.path}/*</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 
 	<profiles>

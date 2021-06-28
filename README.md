@@ -1,9 +1,9 @@
 # <a href="https://retest.dev"><img src="https://assets.retest.org/retest/ci/logos/recheck-screen.svg" width="300"/></a>
 
-[![Build Status](https://travis-ci.com/retest/recheck-junit-jupiter-extension.svg?branch=master)](https://travis-ci.com/retest/recheck-junit-jupiter-extension)
+[![Build Status](https://github.com/retest/recheck-junit-jupiter-extension/actions/workflows/build-project.yml/badge.svg)](https://github.com/retest/recheck-junit-jupiter-extension/actions/workflows/build-project.yml)
 [![Latest recheck-junit-jupiter-extension on Maven Central](https://maven-badges.herokuapp.com/maven-central/de.retest/recheck-junit-jupiter-extension/badge.svg?style=flat)](https://mvnrepository.com/artifact/de.retest/recheck-junit-jupiter-extension)
 [![Latest recheck-junit-jupiter-extension releases on JitPack](https://jitpack.io/v/de.retest/recheck-junit-jupiter-extension.svg)](https://jitpack.io/#de.retest/recheck-junit-jupiter-extension)
-[![license](https://img.shields.io/badge/license-AGPL-brightgreen.svg)](https://github.com/retest/recheck-junit-jupiter-extension/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/license-AGPL-brightgreen.svg)](https://github.com/retest/recheck-junit-jupiter-extension/blob/main/LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/retest/recheck-junit-jupiter-extension/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 [![code with hearth by retest](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-retest-C1D82F.svg)](https://retest.de/)
 

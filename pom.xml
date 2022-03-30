@@ -4,7 +4,7 @@
 
 	<groupId>de.retest</groupId>
 	<artifactId>recheck-junit-jupiter-extension</artifactId>
-	<version>1.12.0</version>
+	<version>1.13.0</version>
 
 	<name>recheck-junit-jupiter-extension</name>
 	<description>JUnit Jupiter extension reducing boilerplate code in tests.</description>
@@ -73,14 +73,14 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.7.2</version>
+			<version>5.8.2</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>de.retest</groupId>
 			<artifactId>recheck</artifactId>
-			<version>1.12.0</version>
+			<version>1.13.0</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -89,14 +89,14 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.19.0</version>
+			<version>3.22.0</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.10.0</version>
+			<version>4.3.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -105,7 +105,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.0</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
@@ -122,7 +122,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.2.2</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -139,7 +139,7 @@
 			<plugin>
 				<groupId>com.amashchenko.maven.plugin</groupId>
 				<artifactId>gitflow-maven-plugin</artifactId>
-				<version>1.16.0</version>
+				<version>1.18.0</version>
 				<configuration>
 					<gitFlowConfig>
 						<productionBranch>main</productionBranch>
@@ -174,7 +174,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.3.2</version>
 				<executions>
 					<execution>
 						<id>bundle-javadoc</id>
@@ -193,7 +193,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -214,7 +214,7 @@
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
+				<version>1.6.12</version>
 				<extensions>true</extensions>
 				<configuration>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
